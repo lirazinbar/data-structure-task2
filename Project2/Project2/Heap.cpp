@@ -1,34 +1,35 @@
 #include "Heap.h"
 
-void Heap::insert(Person* p) {
+void Heap::insert(Person* p, int& NumComp) {
 	arr[heapSize] = p;
-	heapifyUp(heapSize);
+	heapifyUp(heapSize, NumComp);
 	heapSize++;
 }
 
-void Heap::heapifyUp(int index) {
+void Heap::heapifyUp(int index, int& NumComp) {
 	if (index == 0)  return;
 
 	int parentI = (index - 1) / 2;
 
+	NumComp++;
 	if (arr[parentI]->getId() > arr[index]->getId()) {
 		swap((arr+parentI), (arr+index));
 
-		heapifyUp(parentI);
+		heapifyUp(parentI, NumComp);
 	}
 }
 
-Person* Heap::deleteMin() {
+Person* Heap::deleteMin(int& NumComp) {
 	Person* min = arr[0];
 
 	arr[0] = arr[heapSize - 1];
 	// delete arr[heapSize - 1];
 	heapSize--;
-	heapifyDown(0);
+	heapifyDown(0, NumComp);
 	return min;
 }
 
-void Heap::heapifyDown(int index) {
+void Heap::heapifyDown(int index, int& NumComp) {
 	int leftI, rightI;
 
 	leftI = (index * 2) + 1;
@@ -37,31 +38,42 @@ void Heap::heapifyDown(int index) {
 	if (leftI >= heapSize) return; // is leave
 
 	if (rightI >= heapSize) {
-		if (arr[leftI] < arr[index]) {
+		NumComp++;
+		if (arr[leftI]->getId() < arr[index]->getId()) {
 			swap(arr + leftI, arr + index);
 		}
 	}
 	else {
-		if (arr[leftI] < arr[rightI] && arr[leftI] < arr[index]) {
-			swap(arr + leftI, arr + index);
-			heapifyDown(leftI);
+		NumComp++;
+		if (arr[leftI]->getId() < arr[rightI]->getId()) {
+			NumComp++;
+			if (arr[leftI]->getId() < arr[index]->getId()) {
+				swap(arr + leftI, arr + index);
+				heapifyDown(leftI, NumComp);
+			}
 		}
-		else if (arr[rightI] < arr[leftI] && arr[rightI] < arr[index]) {
-			swap(arr + rightI, arr + rightI);
-			heapifyDown(rightI);
+		else {
+			NumComp++;
+			if (arr[rightI]->getId() < arr[leftI]->getId()) {
+				NumComp++;
+				if (arr[rightI]->getId() < arr[index]->getId()) {
+					swap(arr + rightI, arr + index);
+					heapifyDown(rightI, NumComp);
+				}
+			}
 		}
 	}
 }
 
-void Heap::buildHeap(Person** arrToBuild) {
+void Heap::buildHeap(Person** arrToBuild, int& NumComp) {
 	int i;
 
-	for (i = heapSize - 1; i >= heapSize / 2; i--) {
+	for (i = 0; i < heapSize; i++) {
 		arr[i] = arrToBuild[i];
 	}
 
 	for (i = heapSize / 2 - 1; i >= 0; i--) {
-		heapifyDown(i);
+		heapifyDown(i, NumComp);
 	}
 }
 
@@ -74,4 +86,13 @@ void Heap::swap(Person** p1, Person** p2) {
 	Person* temp = *p1;
 	*p1 = *p2;
 	*p2 = temp;
+}
+
+Person* Heap::selectHeap(int k, int& NumComp) {
+	Person* p = nullptr;
+	for (int i = 1; i <= k; i++) {
+		p = deleteMin(NumComp);
+	}
+
+	return p;
 }

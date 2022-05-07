@@ -7,6 +7,9 @@ class Person
     std::string name = "";
 
 public:
-    Person(const int _id, const std::string& _name) : id(_id), name(_name) {}
-    int getId() { return id; }
+    Person() {};
+    Person(const int _id, const std::string& _name) : id(_id), name(_name) {};
+    void setPerson(int _id, std::string _name) { id = _id, name = _name; }
+    const int getId() const { return id; }
+    const std::string getName() const { return name; }
 };

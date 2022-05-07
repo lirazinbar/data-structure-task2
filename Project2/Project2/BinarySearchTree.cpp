@@ -1,18 +1,17 @@
 #include "BinarySearchTree.h"
 
-void BinarySearchTree::insertPerson(Person* p) {
+void BinarySearchTree::insertPerson(Person* p, int& NumComp) {
 	TreeNode* newNode = new TreeNode(p);
 
 	if (!root) root = newNode;
-	else insertNodeRec(newNode, root);
+	else insertNodeRec(newNode, root, NumComp);
 }
 
-void BinarySearchTree::insertNodeRec(TreeNode* node, TreeNode* root) {
-	if (node->data->getId() == root->data->getId()) return;
-
+void BinarySearchTree::insertNodeRec(TreeNode* node, TreeNode* root, int& NumComp) {
+	NumComp++;
 	if (node->data->getId() < root->data->getId()) {
 		if (root->left) {
-			return insertNodeRec(node, root->left);
+			return insertNodeRec(node, root->left, NumComp);
 		}
 		else {
 			root->left = node;
@@ -21,7 +20,7 @@ void BinarySearchTree::insertNodeRec(TreeNode* node, TreeNode* root) {
 	}
 
 	if (root->right) {
-		return insertNodeRec(node, root->right);
+		return insertNodeRec(node, root->right, NumComp);
 	}
 	else {
 		root->right = node;
@@ -79,4 +78,23 @@ TreeNode* BinarySearchTree::findFather(TreeNode* node, TreeNode* root) {
 
 	if (node->data->getId() < root->data->getId()) return findFather(node, root->left);
 	return findFather(node, root->right);
+}
+
+Person* BinarySearchTree::findPersonKth(int k) {
+	int count = 0;
+	return findPersonKthRec(root, k, count)->data;
+}
+
+TreeNode* BinarySearchTree::findPersonKthRec(TreeNode* root, int k, int& count) {
+	if (!root) return nullptr;
+
+	TreeNode* left = findPersonKthRec(root->left, k, count);
+	
+	if (left) return left;
+
+	count++;
+
+	if (count == k) return root;
+
+	return findPersonKthRec(root->right, k, count);
 }
