@@ -98,3 +98,15 @@ TreeNode* BinarySearchTree::findPersonKthRec(TreeNode* root, int k, int& count) 
 
 	return findPersonKthRec(root->right, k, count);
 }
+
+void BinarySearchTree::freeTree() {
+	freeTreeRec(root);
+}
+
+void BinarySearchTree::freeTreeRec(TreeNode* root) {
+	if (!root) return;
+
+	freeTreeRec(root->left);
+	freeTreeRec(root->right);
+	delete root;
+}

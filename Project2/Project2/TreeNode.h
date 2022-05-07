@@ -7,5 +7,6 @@ struct TreeNode
     TreeNode* left;
     TreeNode* right;
 
+    // Ctor
     TreeNode(Person* _data) : data(_data), left(nullptr), right(nullptr) {}
 };

@@ -23,7 +23,6 @@ Person* Heap::deleteMin(int& NumComp) {
 	Person* min = arr[0];
 
 	arr[0] = arr[heapSize - 1];
-	// delete arr[heapSize - 1];
 	heapSize--;
 	heapifyDown(0, NumComp);
 	return min;
@@ -65,11 +64,11 @@ void Heap::heapifyDown(int index, int& NumComp) {
 	}
 }
 
-void Heap::buildHeap(Person** arrToBuild, int& NumComp) {
+void Heap::buildHeap(Person* arrToBuild, int& NumComp) {
 	int i;
 
 	for (i = 0; i < heapSize; i++) {
-		arr[i] = arrToBuild[i];
+		arr[i] = new Person(arrToBuild[i]);
 	}
 
 	for (i = heapSize / 2 - 1; i >= 0; i--) {
@@ -78,7 +77,11 @@ void Heap::buildHeap(Person** arrToBuild, int& NumComp) {
 }
 
 void Heap::makeEmpty() {
-	delete arr;
+	for (int i = 0; i < heapSize; i++) {
+		delete arr[i];
+	}
+
+	delete[] arr;
 	heapSize = 0;
 }
 

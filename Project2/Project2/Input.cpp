@@ -3,12 +3,12 @@
 #include <sstream>
 #include <vector>
 
-Person** getInput(int& n, int& k) {
+Person* getInput(int& n, int& k) {
 	std::cin >> n;
 	if (n < 1) {
 		inputError();
 	}
-	Person** personArr = new Person * [n];
+	Person* personArr = new Person[n];
 	for (int i = 0; i < n; i++) {
 		int idNumber;
 		std::string name;
@@ -18,8 +18,7 @@ Person** getInput(int& n, int& k) {
 		std::getchar();
 		std::getline(std::cin, name);
 		checkName(name);
-		//personArr[i]->setPerson(idNumber, name);
-		personArr[i] = new Person(idNumber, name);
+		personArr[i].setPerson(idNumber, name);
 	}
 	std::cin >> k;
 	// k is smaller or equal to n
@@ -29,10 +28,10 @@ Person** getInput(int& n, int& k) {
 	return personArr;
 }
 
-void checkIdNumber(Person* arr[], int index, int idNumber) {
+void checkIdNumber(Person arr[], int index, int idNumber) {
 	// Check the previous persons if the new idNumber repeats
 	for (int i = 0; i < index; i++) {
-		if (arr[i]->getId() == idNumber)
+		if (arr[i].getId() == idNumber)
 			inputError();
 	}
 }
